@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {% if app.user %}
+            <div class="mb-3">
+                Vous etes connecté en tant que {{ app.user.username }}, <a href="{{ path('app_logout') }}">Deconnexion</a>
+            </div>
+        {% endif %}
+        {% if channels %}
+            <h2>Avec qui voulez-vous discuter ?</h2>
+            <table class="table table-striped">
+                <tbody>
+                {% for channel in channels %}
+                    <tr class="">
+                        <th>
+                            <span>{{ channel.name }}</span>
+                            <a class="btn btn-primary float-right" href="{{ path('chat', {id: channel.id}) }}">Go chat !</a>
+                        </th>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div>
+                <div class="alert alert-danger text-center">Pas de canal trouvé.</div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
