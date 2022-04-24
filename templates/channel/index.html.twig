@@ -6,7 +6,7 @@
     <div class="container">
         {% if app.user %}
             <div class="mb-3">
-                Vous etes connecté en tant que {{ app.user.username }}, <a href="{{ path('app_logout') }}">Deconnexion</a>
+                Vous etes connecté en tant que {{ app.user.username }}, <a href="{{ path('security_logout') }}">Deconnexion</a>
             </div>
         {% endif %}
         {% if channels %}

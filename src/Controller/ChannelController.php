@@ -27,13 +27,12 @@ class ChannelController extends AbstractController
         return $this->render('channel/index.html.twig', ['channels' => $channels ?? []]);
     }
 
-    #[Route('/chat', name: 'chat')]
+    #[Route('/chat/{id}', name: 'chat')]
     public function chat(Channel $channel): Response
     {
         $messages = $this->messageRepository->findBy([
             'channel' => $channel
         ], ['createdAt' => 'ASC']);
-
         return $this->render('channel/chat.html.twig', compact('channel', 'messages'));
     }
 }

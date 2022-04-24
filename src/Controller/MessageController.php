@@ -28,7 +28,8 @@ class MessageController extends AbstractController
     public function send(Request $request): JsonResponse
     {
         // On récupère les data postées et on les déserialize
-        $data = \json_decode($request->getContent(), true);
+        $data = $this->jsonDecode($request->getContent(), true);
+
         if (empty($content = $data['content'])) {
             throw new AccessDeniedHttpException('Aucune donnée reçue');
         }
@@ -60,5 +61,26 @@ class MessageController extends AbstractController
             [],
             true
         );
+    }
+
+    function jsonDecode($json, $assoc = false)
+    {
+        $ret = json_decode($json, $assoc);
+        if ($error = json_last_error())
+        {
+            $errorReference = [
+                JSON_ERROR_DEPTH => 'The maximum stack depth has been exceeded.',
+                JSON_ERROR_STATE_MISMATCH => 'Invalid or malformed JSON.',
+                JSON_ERROR_CTRL_CHAR => 'Control character error, possibly incorrectly encoded.',
+                JSON_ERROR_SYNTAX => 'Syntax error.',
+                JSON_ERROR_UTF8 => 'Malformed UTF-8 characters, possibly incorrectly encoded.',
+                JSON_ERROR_RECURSION => 'One or more recursive references in the value to be encoded.',
+                JSON_ERROR_INF_OR_NAN => 'One or more NAN or INF values in the value to be encoded.',
+                JSON_ERROR_UNSUPPORTED_TYPE => 'A value of a type that cannot be encoded was given.',
+            ];
+            $errStr = isset($errorReference[$error]) ? $errorReference[$error] : "Unknown error ($error)";
+            throw new \Exception("JSON decode error ($error): $errStr");
+        }
+        return $ret;
     }
 }
