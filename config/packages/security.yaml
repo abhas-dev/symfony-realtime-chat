@@ -8,18 +8,32 @@ security:
 
   # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
   providers:
-    # used to reload user from session & other features (e.g. switch_user)
-    app_user_provider:
+    doctrine:
       entity:
         class: App\Entity\User
         property: email
+
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
+
     main:
       lazy: true
-      provider: app_user_provider
+      provider: doctrine
+      entry_point: form_login
+
+      form_login:
+        login_path: security_login
+        check_path: security_login
+        username_parameter: email
+        password_parameter: password
+        enable_csrf: true
+      logout:
+        path: security_logout
+        # where to redirect after logout
+#        target: channel_home
+#      custom_authenticator: App\Security\ClassicAuthenticator
 
       # activate different ways to authenticate
       # https://symfony.com/doc/current/security.html#the-firewall

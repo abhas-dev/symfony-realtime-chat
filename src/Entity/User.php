@@ -20,6 +20,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     private string $email;
 
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    private string $username;
+
     #[ORM\Column(type: 'json')]
     /* @var array<string|null> */
     private array $roles = [];
@@ -28,7 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $password;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Message::class)]
-    private string $messages;
+    private Collection $messages;
 
     public function __construct()
     {
@@ -49,6 +52,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->email = $email;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param string $username
+     * @return User
+     */
+    public function setUsername(string $username): User
+    {
+        $this->username = $username;
         return $this;
     }
 

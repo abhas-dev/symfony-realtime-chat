@@ -13,11 +13,11 @@ class Message
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups('message')]
+    #[Groups(['message'])]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups('message')]
+    #[Groups(['message'])]
     private string $content;
 
     #[ORM\Column(type: 'datetime_immutable')]
@@ -25,13 +25,18 @@ class Message
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'messages')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups('message')]
+    #[Groups(['message'])]
     private UserInterface $author;
 
     #[ORM\ManyToOne(targetEntity: Channel::class, inversedBy: 'messages')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups('message')]
-    private $channel;
+    #[Groups(['message'])]
+    private Channel $channel;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
